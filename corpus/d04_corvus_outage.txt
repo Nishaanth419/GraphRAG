@@ -1,0 +1,1 @@
+On March 3, Corvus Cloud suffered a major outage in the eu-west region lasting about 40 minutes. Status updates were slow and customers noticed.

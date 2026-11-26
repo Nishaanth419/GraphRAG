@@ -1,0 +1,5 @@
+.venv/
+__pycache__/
+neo4j.env
+*.pyc
+.DS_Store

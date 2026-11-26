@@ -1,0 +1,13 @@
+{
+ "4c0977ff8118b1b946325c1e6c82980f530cd68a5b4a8fe60ff21391875aae92": "Anika Rao, who owns the Mobile App, reported that the app was shipped in April. She reports to Marcus\u202fWebb, creating a reporting dependency between them.",
+ "86334829e5fa1ec9437d74cfc766e773a715590ab9fe535dc6b931f17f6679d5": "Billing Reports is owned by the Finance Systems team. The Finance Systems team is led by Leo\u202fPark.",
+ "f177713dbf5f65fad5f45aedc9a054966c353a648136b85ac84010d417ea4a3d": "Checkout stores data in LedgerDB and depends on LedgerDB; LedgerDB is hosted on Corvus\u202fCloud, which is a single point of failure, and an outage on March\u202f3 caused Checkout to go down. LedgerDB has been migrated to Stratus\u202fHosting, which provides an alternative to Corvus\u202fCloud.",
+ "db65e3e30e58c4778eefb83ed878520e44389946f2f534e275ae76e88485da63": "The Discovery team, led by Tomas Ortiz, owns Search, which reads from IndexStore. Tomas Ortiz reports to Dana Kim.",
+ "69b838151c29af788989e65dbed8bd39f4acc8f9cc7db5c638657375a55169cc": "Priya Nair leads and organized the Payments team. The Payments team belongs to Helio Labs.",
+ "40c3de8d64e08210c5dfc056edd06d00ec06acf101f6133c1f3d19acf6c31331": "Sam Ibarra is a member of Procurement. Procurement includes Sam Ibarra as a member.",
+ "ffaae8f72fcbe9291633bd983420f14f2cd4e275d0a9af2dcf38d20b3e562236": "Priya Nair leads the Payments team and reports to Marcus\u202fWebb. Anika\u202fRao also reports to Marcus\u202fWebb.",
+ "3b71c6577957c11c7bd66bc480216c1837cfa791e6157ab9b0134a80d7d7156d": "Search reads from IndexStore. The Mobile App, which depends on Search, was shipped in April.",
+ "26a21e6a67a939d311d6364fd063d37f40946d6cf9150b8bc7b9c20a5e62b568": "The Discovery team is led by Tomas\u202fOrtiz, who reports to Dana\u202fKim. The Finance\u202fSystems team, led by Leo\u202fPark (who also reports to Dana\u202fKim), owns the Billing\u202fReports.",
+ "c6552c5edbc7e034e2da2bb075005e91da5a8b8de9ce99ac19a3e4c9ba1e23ea": "Checkout stores data in LedgerDB and depends on LedgerDB, which runs on Corvus\u202fCloud, making Corvus\u202fCloud a vendor risk and single point of failure for LedgerDB. An outage on March\u202f3 affected Corvus\u202fCloud and consequently Checkout, and LedgerDB has a planned move to Stratus\u202fHosting, which has been evaluated as an alternative to Corvus\u202fCloud.",
+ "b5ddb1f7f3db41be42a3d26be33eb396daa3794ce90d9e5f4622f5bdce18d55e": "Sam Ibarra belongs to Procurement. Procurement includes Sam Ibarra as a member."
+}

@@ -1,0 +1,5 @@
+networkx
+scikit-learn
+groq
+sentence-transformers
+neo4j

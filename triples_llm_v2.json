@@ -1,0 +1,194 @@
+[
+ [
+  "Priya Nair",
+  "leads",
+  "Payments team",
+  "d01_payments_team"
+ ],
+ [
+  "Payments team",
+  "belongs to",
+  "Helio Labs",
+  "d01_payments_team"
+ ],
+ [
+  "Payments team",
+  "owns",
+  "Checkout",
+  "d01_payments_team"
+ ],
+ [
+  "Checkout",
+  "stores in",
+  "LedgerDB",
+  "d02_checkout_architecture"
+ ],
+ [
+  "Checkout",
+  "depends on",
+  "LedgerDB",
+  "d02_checkout_architecture"
+ ],
+ [
+  "LedgerDB",
+  "hosted on",
+  "Corvus Cloud",
+  "d03_ledgerdb_hosting"
+ ],
+ [
+  "Corvus Cloud",
+  "had outage on",
+  "March 3",
+  "d04_corvus_outage"
+ ],
+ [
+  "Priya Nair",
+  "reports to",
+  "Marcus Webb",
+  "d05_org_engineering"
+ ],
+ [
+  "Anika Rao",
+  "reports to",
+  "Marcus Webb",
+  "d05_org_engineering"
+ ],
+ [
+  "Discovery team",
+  "owns",
+  "Search",
+  "d06_search_service"
+ ],
+ [
+  "Discovery team",
+  "led by",
+  "Tomas Ortiz",
+  "d06_search_service"
+ ],
+ [
+  "Search",
+  "reads from",
+  "IndexStore",
+  "d06_search_service"
+ ],
+ [
+  "IndexStore",
+  "hosted on",
+  "Corvus Cloud",
+  "d06_search_service"
+ ],
+ [
+  "Mobile App",
+  "owned by",
+  "Anika Rao",
+  "d07_mobile_app"
+ ],
+ [
+  "Mobile App",
+  "depends on",
+  "Checkout",
+  "d07_mobile_app"
+ ],
+ [
+  "Mobile App",
+  "depends on",
+  "Search",
+  "d07_mobile_app"
+ ],
+ [
+  "Tomas Ortiz",
+  "reports to",
+  "Dana Kim",
+  "d08_org_product"
+ ],
+ [
+  "Leo Park",
+  "reports to",
+  "Dana Kim",
+  "d08_org_product"
+ ],
+ [
+  "Billing Reports",
+  "owned by",
+  "Finance Systems team",
+  "d09_billing_reports"
+ ],
+ [
+  "Finance Systems team",
+  "led by",
+  "Leo Park",
+  "d09_billing_reports"
+ ],
+ [
+  "Billing Reports",
+  "reads from",
+  "LedgerDB",
+  "d09_billing_reports"
+ ],
+ [
+  "Corvus Cloud",
+  "had outage on",
+  "March 3",
+  "d10_postmortem"
+ ],
+ [
+  "Checkout",
+  "down due to",
+  "Corvus Cloud",
+  "d10_postmortem"
+ ],
+ [
+  "Priya Nair",
+  "migrates",
+  "LedgerDB",
+  "d10_postmortem"
+ ],
+ [
+  "LedgerDB",
+  "migrated to",
+  "Stratus Hosting",
+  "d10_postmortem"
+ ],
+ [
+  "Corvus Cloud",
+  "single point of failure for",
+  "LedgerDB",
+  "d11_vendor_risk"
+ ],
+ [
+  "Corvus Cloud",
+  "single point of failure for",
+  "IndexStore",
+  "d11_vendor_risk"
+ ],
+ [
+  "Stratus Hosting",
+  "alternative to",
+  "Corvus Cloud",
+  "d11_vendor_risk"
+ ],
+ [
+  "Sam Ibarra",
+  "member of",
+  "Procurement",
+  "d12_procurement"
+ ],
+ [
+  "Sam Ibarra",
+  "negotiated renewal with",
+  "Corvus Cloud",
+  "d12_procurement"
+ ],
+ [
+  "Priya Nair",
+  "organized",
+  "Payments team",
+  "d13_offsite"
+ ],
+ [
+  "Mobile App",
+  "shipped in",
+  "April",
+  "d14_mobile_release"
+ ]
+]

@@ -1,0 +1,332 @@
+[
+ [
+  "Priya Nair",
+  "leads",
+  "Payments team",
+  "d01_payments_team"
+ ],
+ [
+  "Payments team",
+  "belongs to",
+  "Helio Labs",
+  "d01_payments_team"
+ ],
+ [
+  "Payments team",
+  "owns",
+  "Checkout service",
+  "d01_payments_team"
+ ],
+ [
+  "Checkout service",
+  "processes",
+  "customer orders",
+  "d01_payments_team"
+ ],
+ [
+  "Checkout",
+  "stores",
+  "order",
+  "d02_checkout_architecture"
+ ],
+ [
+  "Checkout",
+  "stores",
+  "transaction",
+  "d02_checkout_architecture"
+ ],
+ [
+  "Checkout",
+  "stores_in",
+  "LedgerDB",
+  "d02_checkout_architecture"
+ ],
+ [
+  "Checkout",
+  "cannot_complete",
+  "purchase",
+  "d02_checkout_architecture"
+ ],
+ [
+  "LedgerDB",
+  "runs on",
+  "Corvus Cloud",
+  "d03_ledgerdb_hosting"
+ ],
+ [
+  "Corvus Cloud",
+  "located in",
+  "eu-west region",
+  "d03_ledgerdb_hosting"
+ ],
+ [
+  "Backups",
+  "taken",
+  "nightly",
+  "d03_ledgerdb_hosting"
+ ],
+ [
+  "Corvus Cloud",
+  "suffered",
+  "major outage",
+  "d04_corvus_outage"
+ ],
+ [
+  "major outage",
+  "occurred_on",
+  "March 3",
+  "d04_corvus_outage"
+ ],
+ [
+  "major outage",
+  "location",
+  "eu-west region",
+  "d04_corvus_outage"
+ ],
+ [
+  "major outage",
+  "duration",
+  "40 minutes",
+  "d04_corvus_outage"
+ ],
+ [
+  "status updates",
+  "were",
+  "slow",
+  "d04_corvus_outage"
+ ],
+ [
+  "customers",
+  "noticed",
+  "status updates",
+  "d04_corvus_outage"
+ ],
+ [
+  "Marcus Webb",
+  "holds position",
+  "VP of Engineering",
+  "d05_org_engineering"
+ ],
+ [
+  "Priya Nair",
+  "reports to",
+  "Marcus Webb",
+  "d05_org_engineering"
+ ],
+ [
+  "Anika Rao",
+  "reports to",
+  "Marcus Webb",
+  "d05_org_engineering"
+ ],
+ [
+  "Search service",
+  "owned by",
+  "Discovery team",
+  "d06_search_service"
+ ],
+ [
+  "Discovery team",
+  "led by",
+  "Tomas Ortiz",
+  "d06_search_service"
+ ],
+ [
+  "Search service",
+  "reads from",
+  "IndexStore",
+  "d06_search_service"
+ ],
+ [
+  "IndexStore",
+  "hosted on",
+  "Corvus Cloud",
+  "d06_search_service"
+ ],
+ [
+  "Mobile App",
+  "owned by",
+  "Anika Rao",
+  "d07_mobile_app"
+ ],
+ [
+  "Mobile App",
+  "depends on",
+  "Checkout service",
+  "d07_mobile_app"
+ ],
+ [
+  "Mobile App",
+  "depends on",
+  "Search service",
+  "d07_mobile_app"
+ ],
+ [
+  "Dana Kim",
+  "holds position",
+  "VP of Product",
+  "d08_org_product"
+ ],
+ [
+  "Tomas Ortiz",
+  "reports to",
+  "Dana Kim",
+  "d08_org_product"
+ ],
+ [
+  "Leo Park",
+  "reports to",
+  "Dana Kim",
+  "d08_org_product"
+ ],
+ [
+  "Billing Reports",
+  "owned by",
+  "Finance Systems team",
+  "d09_billing_reports"
+ ],
+ [
+  "Finance Systems team",
+  "led by",
+  "Leo Park",
+  "d09_billing_reports"
+ ],
+ [
+  "Billing Reports",
+  "reads daily from",
+  "LedgerDB",
+  "d09_billing_reports"
+ ],
+ [
+  "Billing Reports",
+  "produces",
+  "invoices",
+  "d09_billing_reports"
+ ],
+ [
+  "March 3 incident",
+  "involves",
+  "Corvus Cloud outage",
+  "d10_postmortem"
+ ],
+ [
+  "Corvus Cloud outage",
+  "caused",
+  "Checkout down",
+  "d10_postmortem"
+ ],
+ [
+  "Checkout down",
+  "duration",
+  "40 minutes",
+  "d10_postmortem"
+ ],
+ [
+  "Priya Nair",
+  "will migrate",
+  "LedgerDB to Stratus Hosting",
+  "d10_postmortem"
+ ],
+ [
+  "Migration",
+  "deadline",
+  "Q3",
+  "d10_postmortem"
+ ],
+ [
+  "Corvus Cloud",
+  "is major vendor risk",
+  "true",
+  "d11_vendor_risk"
+ ],
+ [
+  "Corvus Cloud",
+  "is single point of failure for",
+  "LedgerDB",
+  "d11_vendor_risk"
+ ],
+ [
+  "Corvus Cloud",
+  "is single point of failure for",
+  "IndexStore",
+  "d11_vendor_risk"
+ ],
+ [
+  "Stratus Hosting",
+  "evaluated as alternative to",
+  "Corvus Cloud",
+  "d11_vendor_risk"
+ ],
+ [
+  "Stratus Hosting",
+  "rated favorably",
+  "true",
+  "d11_vendor_risk"
+ ],
+ [
+  "Sam Ibarra",
+  "belongs to",
+  "Procurement",
+  "d12_procurement"
+ ],
+ [
+  "Sam Ibarra",
+  "negotiated",
+  "Corvus Cloud contract renewal",
+  "d12_procurement"
+ ],
+ [
+  "Corvus Cloud contract renewal",
+  "is",
+  "annual",
+  "d12_procurement"
+ ],
+ [
+  "Pricing",
+  "reduced by",
+  "8 percent",
+  "d12_procurement"
+ ],
+ [
+  "Payments Team",
+  "held offsite in",
+  "Lisbon",
+  "d13_offsite"
+ ],
+ [
+  "Priya Nair",
+  "organized",
+  "agenda",
+  "d13_offsite"
+ ],
+ [
+  "Payments Team",
+  "discussed",
+  "hiring plans for next year",
+  "d13_offsite"
+ ],
+ [
+  "Mobile App 4.2",
+  "shipped in",
+  "April",
+  "d14_mobile_release"
+ ],
+ [
+  "Mobile App 4.2",
+  "has feature",
+  "redesigned checkout screen",
+  "d14_mobile_release"
+ ],
+ [
+  "Anika Rao",
+  "presented",
+  "Mobile App 4.2 release",
+  "d14_mobile_release"
+ ],
+ [
+  "Mobile App 4.2 release",
+  "presented at",
+  "all-hands",
+  "d14_mobile_release"
+ ]
+]

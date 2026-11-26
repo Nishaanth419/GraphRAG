@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GraphRAG vs RAG</title>
+<style>
+:root{--bg:#fafaf7;--panel:#fff;--ink:#1d2129;--mute:#667085;--line:#e4e4de;--acc:#2f6fed;--ok:#1a7f4b;--bad:#c2410c;--c0:#2f6fed;--c1:#d9822b;--c2:#1a9a8a;--c3:#8a5cd6;--c4:#c2415a}
+@media(prefers-color-scheme:dark){:root{--bg:#14161a;--panel:#1c1f25;--ink:#e8eaee;--mute:#98a2b3;--line:#2c303a;--acc:#6e9bff;--ok:#4cc38a;--bad:#ff8a4c;--c0:#6e9bff;--c1:#f0a35c;--c2:#4cc8b8;--c3:#b394f0;--c4:#f07a92}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,system-ui,sans-serif}
+main{max-width:1060px;margin:0 auto;padding:32px 16px 64px}h1{font-size:28px;margin:0 0 4px}h2{font-size:20px;margin:44px 0 6px}
+.sub{color:var(--mute);margin:0 0 8px}.badge{display:inline-block;font-size:12px;padding:2px 8px;border:1px solid var(--line);border-radius:99px;color:var(--mute)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+.steps .n{font-weight:700;color:var(--acc)}code,.mono{font-family:ui-monospace,Menlo,monospace;font-size:12.5px}
+.tri{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;word-break:break-word}
+svg{width:100%;height:auto;display:block}.edge{stroke:var(--mute);stroke-width:1.2;opacity:.35;transition:.15s}.edge.on{stroke:var(--acc);stroke-width:2.6;opacity:1}
+.node text{font-size:12px;fill:var(--ink);pointer-events:none;paint-order:stroke;stroke:var(--panel);stroke-width:3px}.node circle{stroke:var(--panel);stroke-width:2px;cursor:pointer}.node.dim{opacity:.35}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.tabs button{font:inherit;padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.tabs button[aria-pressed=true]{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:700px){.cols{grid-template-columns:1fr}}
+.chip{display:inline-block;margin:3px 4px 3px 0;padding:2px 8px;border-radius:6px;font-size:12px;border:1px solid var(--line);cursor:help}
+.chip.hit{background:color-mix(in srgb,var(--ok) 18%,transparent);border-color:var(--ok)}.chip.extra{color:var(--mute)}.chip.miss{border:1px dashed var(--bad);color:var(--bad)}
+.big{font-size:30px;font-weight:700}.legend{color:var(--mute);font-size:13px;margin-top:8px}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line)}
+.edge.new{stroke:var(--c1);stroke-width:3.6;opacity:1;stroke-dasharray:6 4;animation:flow .9s linear infinite}@keyframes flow{to{stroke-dashoffset:-20}}
+.node.new circle{stroke:var(--c1);stroke-width:5px}.node.seed circle{stroke:var(--ink);stroke-width:4px}
+.ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}.ctl button{font:inherit;padding:6px 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}.ctl button:disabled{opacity:.4;cursor:default}
+.dots{display:flex;gap:6px}.dots i{width:26px;height:6px;border-radius:3px;background:var(--line);display:block;cursor:pointer}.dots i.done{background:var(--acc)}.dots i.cur{background:var(--c1)}
+.fact{padding:3px 0;border-bottom:1px dashed var(--line)}.fact:last-child{border:0}.bar{height:10px;border-radius:5px;background:var(--acc);min-width:2px}
+#detail{min-height:44px;color:var(--mute);margin-top:8px}.good{color:var(--ok)}.warn{color:var(--bad)}
+</style></head><body><main>
+<h1>How GraphRAG works, and how it differs from RAG</h1>
+<p class="sub">14 short documents about a fictional company. </p><div class="tabs" id="srctabs"></div><div class="card" id="dupes" style="margin-bottom:12px"></div>
+
+<h2>1. Building the graph</h2>
+<div class="steps">
+ <div class="card"><div class="n">Step 1: Extract</div>An LLM reads each document and emits <code>[subject, relation, object]</code> facts, tagged with their source document.
+  <div class="tri mono">LedgerDB — hosted on → Corvus Cloud <span style="color:var(--mute)">[d03]</span></div>
+  <div class="tri mono">IndexStore — hosted on → Corvus Cloud <span style="color:var(--mute)">[d06]</span></div></div>
+ <div class="card"><div class="n">Step 2: Link</div>Triples become edges. The same name in two documents becomes <b>one node</b>, so LedgerDB and IndexStore now meet at Corvus Cloud although no document mentions both.</div>
+ <div class="card"><div class="n">Step 3: Cluster</div>Louvain finds groups of nodes more connected to each other than to the rest. Colors below are these communities.</div>
+ <div class="card"><div class="n">Step 4: Summarize</div>Each community gets a text summary (an LLM writes it in full GraphRAG). Global questions search these summaries.</div>
+</div>
+<div class="card" style="margin-top:12px"><svg id="g" viewBox="0 0 1120 660" role="img" aria-label="Knowledge graph"></svg>
+<div id="detail">Click an entity to see its relationships and source documents.</div>
+<div class="legend" id="leg"></div></div>
+
+<h2>2. Same questions, two retrievers</h2>
+<p class="sub">Pick a question. Blue edges show what GraphRAG retrieved. Chips are source documents: <span class="chip hit">needed and found</span> <span class="chip extra">found but not needed</span> <span class="chip miss">needed but missed</span></p>
+<div class="tabs" id="tabs"></div>
+<div class="card" id="qcard"></div>
+<div class="cols" style="margin-top:12px"><div class="card"><b>RAG</b> <span class="sub">top-4 most similar documents</span><div class="big" id="rr"></div><div id="rd"></div></div>
+<div class="card"><b>GraphRAG</b> <span class="sub" id="how"></span><div class="big" id="gr"></div><div id="gd"></div></div></div>
+
+<h2>3. Trace one question, step by step</h2>
+<p class="sub">Follows the question selected above. Press Next (or Play) to watch GraphRAG build its context. Orange = added in this step, blue = collected earlier, faded = not reached.</p>
+<div class="card"><div id="tq" style="font-weight:600"></div>
+<div class="ctl"><button id="tprev">◀ Back</button><button id="tnext">Next ▶</button><button id="tplay">▶ Play</button><button id="treset">Reset</button><div class="dots" id="tdots"></div></div>
+<div id="tstep" style="min-height:70px"></div>
+<svg id="tg" viewBox="0 0 1120 660" role="img" aria-label="Trace of the graph walk"></svg>
+<div class="cols" style="margin-top:12px"><div><b>Facts collected in this step</b><div id="tfacts" class="mono" style="margin-top:6px"></div></div>
+<div><b>Source documents so far</b><div id="tdocs" style="margin-top:6px"></div></div></div></div>
+
+<h2>4. Scoreboard (word-count vs embeddings)</h2>
+<div class="card" style="overflow-x:auto"><table style="font-size:13px;min-width:880px"><thead><tr><th>Question</th><th>Type</th><th>RAG recall</th><th>GraphRAG recall</th><th>RAG + embeddings</th><th>GraphRAG + embeddings</th><th>GraphRAG on Neo4j</th><th>RAG precision</th><th>GraphRAG precision</th></tr></thead><tbody id="tb"></tbody></table>
+<p class="legend">First two recall columns use word-count (TF-IDF) retrieval and exact entity-name matching; the "+ embeddings" columns use a local sentence-embedding model for both RAG and GraphRAG (entity linking and community ranking). Recall: share of the needed documents retrieved. Precision: share of retrieved documents that were needed. GraphRAG buys recall on multi-hop questions and pays with precision (more noise) and a costly indexing step.</p></div>
+<h2>5. The same graph in Neo4j</h2>
+<div class="card" id="neo"></div>
+</main>
+<script>
+const ALL=__DATA__;const COL=i=>`var(--c${i%5})`;const $=id=>document.getElementById(id);const NS="http://www.w3.org/2000/svg";
+function drawGraph(svg,D,mid,onNode){const N=Object.fromEntries(D.nodes.map(n=>[n.id,n]));
+svg.innerHTML=`<defs><marker id="${mid}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--mute)"/></marker></defs>`;
+const eg=document.createElementNS(NS,"g"),ng=document.createElementNS(NS,"g");svg.append(eg,ng);const EL=[],NL={};
+D.edges.forEach((e,i)=>{const a=N[e.s],b=N[e.t],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1,r=14;
+ const l=document.createElementNS(NS,"line");l.setAttribute("x1",a.x+dx/L*r);l.setAttribute("y1",a.y+dy/L*r);l.setAttribute("x2",b.x-dx/L*(r+4));l.setAttribute("y2",b.y-dy/L*(r+4));
+ l.setAttribute("class","edge");l.setAttribute("marker-end",`url(#${mid})`);const t=document.createElementNS(NS,"title");t.textContent=`${e.s} —${e.rel}→ ${e.t}  [${e.doc}]`;l.append(t);eg.append(l);EL.push(l)});
+D.nodes.forEach(n=>{const g=document.createElementNS(NS,"g");g.setAttribute("class","node");g.innerHTML=`<circle cx="${n.x}" cy="${n.y}" r="12" fill="${COL(n.c)}"/><text x="${n.x}" y="${n.y-18}" text-anchor="middle">${n.id}</text>`;
+ if(onNode)g.onclick=()=>onNode(n);ng.append(g);NL[n.id]=g});
+return{EL,NL}}
+let TIMER=null;
+function render(D){$("tabs").innerHTML="";
+const {EL,NL}=drawGraph($("g"),D,"a",n=>{const rel=D.edges.filter(e=>e.s===n.id||e.t===n.id);$("detail").innerHTML=`<b style="color:var(--ink)">${n.id}</b>: `+rel.map(e=>`${e.s} <i>${e.rel}</i> ${e.t} <span class="mono">[${e.doc.split("_")[0]}]</span>`).join(" · ")});
+const T=drawGraph($("tg"),D,"a2",null);let cur=0,ti=0;
+$("leg").innerHTML=D.communities.map((c,i)=>`<span style="color:${COL(i)}">●</span> community ${i}: ${c.members.join(", ")}`).join("<br>");
+const pct=x=>Math.round(x*100)+"%",sc=(r,g)=>{const h=r.filter(x=>g.includes(x)).length;return[h/g.length,r.length?h/r.length:0]};
+const chips=(got,gold)=>[...new Set([...got,...gold])].sort().map(d=>{const c=got.includes(d)?(gold.includes(d)?"hit":"extra"):"miss";return`<span class="chip ${c}" title="${ALL.docs[d].replace(/"/g,"&quot;")}">${d.split("_")[0]}</span>`}).join("");
+$("tb").innerHTML=D.questions.map(q=>{const a=sc(q.rag,q.gold),b=sc(q.graph,q.gold),c=sc(q.rag_d,q.gold),d=sc(q.graph_d,q.gold),e=q.neo4j?sc(q.neo4j,q.gold):null;return`<tr><td>${q.q}</td><td>${q.kind}</td><td class="${a[0]<1?"warn":"good"}">${pct(a[0])}</td><td class="${b[0]<1?"warn":"good"}">${pct(b[0])}</td><td class="${c[0]<1?"warn":"good"}">${pct(c[0])}</td><td class="${d[0]<1?"warn":"good"}">${pct(d[0])}</td><td class="${e&&e[0]<1?"warn":"good"}">${e?pct(e[0]):"n/a"}</td><td>${pct(a[1])}</td><td>${pct(b[1])}</td></tr>`}).join("");
+function show(i){const q=D.questions[i];[...$("tabs").children].forEach((b,j)=>b.setAttribute("aria-pressed",i===j));
+ EL.forEach((l,k)=>l.classList.toggle("on",q.g_edges.includes(k)));const act=new Set(q.g_edges.flatMap(k=>[D.edges[k].s,D.edges[k].t]));Object.entries(NL).forEach(([k,g])=>g.classList.toggle("dim",!act.has(k)));
+ const a=sc(q.rag,q.gold),b=sc(q.graph,q.gold);$("qcard").innerHTML=`<b>${q.q}</b><div class="sub">${q.kind}. Documents needed to answer: ${q.gold.map(d=>d.split("_")[0]).join(", ")}</div>`;
+ $("rr").innerHTML=`${pct(a[0])} <span class="sub">recall</span>`;$("gr").innerHTML=`${pct(b[0])} <span class="sub">recall</span>`;$("rd").innerHTML=chips(q.rag,q.gold);$("gd").innerHTML=chips(q.graph,q.gold);$("how").textContent=q.how;
+
+ cur=i;ti=0;stopPlay();drawTrace()}
+
+function stopPlay(){if(TIMER){clearInterval(TIMER);TIMER=null}$("tplay").textContent="▶ Play"}
+function drawTrace(){const q=D.questions[cur],S=q.trace,st=S[ti];$("tq").textContent=q.q;
+ const reached=new Set(),old=new Set(),newE=new Set(),newN=new Set(),docs=new Set();
+ S.slice(0,ti+1).forEach((s,k)=>{s.nodes.forEach(n=>{reached.add(n);if(k===ti)newN.add(n)});s.edges.forEach(e=>{old.add(e);if(k===ti)newE.add(e);const E=D.edges[e];reached.add(E.s);reached.add(E.t)});s.docs.forEach(d=>docs.add(d))});
+ T.EL.forEach((l,k)=>{l.setAttribute("class","edge"+(newE.has(k)?" new":old.has(k)?" on":""))});
+ Object.entries(T.NL).forEach(([k,g])=>g.setAttribute("class","node"+(reached.has(k)?"":" dim")+(newN.has(k)?" new":"")+(ti===0&&reached.has(k)?" seed":"")));
+ let extra="";if(st.scores){const mx=Math.max(...st.scores.map(x=>x.score),0.001);extra="<div style='margin-top:8px'>"+st.scores.map(x=>`<div style="display:grid;grid-template-columns:90px 1fr 54px;gap:8px;align-items:center;font-size:13px"><span style="color:${COL(x.c)}">community ${x.c}</span><div class="bar" style="width:${Math.max(2,x.score/mx*100)}%"></div><span class="mono">${x.score.toFixed(2)}</span></div>`).join("")+"</div>"}
+ $("tstep").innerHTML=`<div class="n" style="font-weight:700;color:var(--acc)">Step ${ti+1} of ${S.length}: ${st.title}</div><div>${st.text}</div>${extra}`;
+ $("tfacts").innerHTML=st.edges.length?st.edges.map(k=>{const e=D.edges[k];return`<div class="fact">${e.s} —${e.rel}→ ${e.t} <span style="color:var(--mute)">[${e.doc.split("_")[0]}]</span></div>`}).join(""):`<span class="sub">${st.final?"None; this step just gathers the documents.":"None in this step."}</span>`;
+ const got=st.final?q.graph:[...docs];$("tdocs").innerHTML=st.final?chips(got,q.gold):(got.length?got.sort().map(d=>`<span class="chip extra" title="${ALL.docs[d].replace(/"/g,"&quot;")}">${d.split("_")[0]}</span>`).join(""):'<span class="sub">none yet</span>');
+ $("tdots").innerHTML=S.map((_,k)=>`<i class="${k<ti?"done":k===ti?"cur":""}" data-k="${k}"></i>`).join("");[...$("tdots").children].forEach(i=>i.onclick=()=>{stopPlay();ti=+i.dataset.k;drawTrace()});
+ $("tprev").disabled=ti===0;$("tnext").disabled=ti===S.length-1}
+$("tprev").onclick=()=>{stopPlay();if(ti>0){ti--;drawTrace()}};$("tnext").onclick=()=>{stopPlay();if(ti<D.questions[cur].trace.length-1){ti++;drawTrace()}};$("treset").onclick=()=>{stopPlay();ti=0;drawTrace()};
+$("tplay").onclick=()=>{if(TIMER){stopPlay();return}if(ti===D.questions[cur].trace.length-1)ti=0;drawTrace();$("tplay").textContent="⏸ Pause";TIMER=setInterval(()=>{if(ti<D.questions[cur].trace.length-1){ti++;drawTrace()}else stopPlay()},1500)};
+D.questions.forEach((q,i)=>{const b=document.createElement("button");b.textContent=q.q;b.onclick=()=>show(i);$("tabs").append(b)});show(2)}
+ALL.graphs.forEach((g,i)=>{const b=document.createElement("button");b.textContent=g.source;b.onclick=()=>{[...$("srctabs").children].forEach((x,j)=>x.setAttribute("aria-pressed",i===j));renderAll(i)};$("srctabs").append(b)});
+
+function drawNeo(G){const st=G.neo4j_stats;$("neo").innerHTML=st?`<p>Loaded into a Neo4j 5 container for this tab: <b>${st.entities}</b> <code>:Entity</code> nodes (each with a 384-number embedding), <b>${st.rels}</b> <code>:REL</code> edges, <b>${st.communities}</b> <code>:Community</code> nodes with summary and embedding. The "GraphRAG on Neo4j" scoreboard column is computed from these queries; it matches the in-memory column.</p>
+<b>1. Entity linking: vector index</b>
+<pre class="tri mono">CALL db.index.vector.queryNodes('entity_embedding', 10, $phrase_vector)
+YIELD node, score RETURN node.name, score ORDER BY score DESC LIMIT 1
+// Neo4j cosine score = (1 + cosine) / 2, converted back before applying the 0.75 threshold</pre>
+<b>2. Local search: distance of every entity from the seeds</b>
+<pre class="tri mono">MATCH (s:Entity) WHERE s.name IN $seeds
+MATCH p = (s)-[:REL*0..5]-(n:Entity)          // 0..hops, either direction
+RETURN n.name, min(length(p)) AS d</pre>
+<b>3. Local search: collect the facts within reach (each keeps its source document)</b>
+<pre class="tri mono">MATCH (a:Entity)-[r:REL]->(b:Entity)
+WHERE a.name IN keys($dist) AND b.name IN keys($dist)
+  AND min($dist[a.name], $dist[b.name]) &lt; $hops
+RETURN a.name, r.rel, b.name, r.doc</pre>
+<b>4. Global search: community vector index</b>
+<pre class="tri mono">CALL db.index.vector.queryNodes('community_embedding', 10, $question_vector)
+YIELD node, score RETURN node.id, node.summary ORDER BY score DESC LIMIT $top</pre>
+<p class="legend">The vector index is approximate. Asking for only the top 1 result once returned the wrong community, so the code fetches 10 candidates and re-ranks them. Browse the live graph at localhost:7474.</p>`:`<span class="sub">Neo4j was not running when this report was generated.</span>`}
+function renderAll(i){const G=ALL.graphs[i];render(G);drawNeo(G);$("dupes").innerHTML=G.dupes.length?`<b class="warn">${G.dupes.length} near-duplicate entities found in this graph</b> <span class="sub">Same real-world thing, different strings, so the graph treats them as separate nodes and links between documents break:</span><div>${G.dupes.map(p=>`<span class="chip miss">${p[0]}  ≠  ${p[1]}</span>`).join("")}</div>`:`<b class="good">No near-duplicate entities.</b> <span class="sub">Names were written consistently, so cross-document links hold.</span>`}
+$("srctabs").children[0].click();
+</script></body></html>
